@@ -1,4 +1,4 @@
-PACTICIPANT := "pactflow-example-bi-directional-provider-restassured"
+PACTICIPANT := "simple-provider"
 GITHUB_REPO := "pactflow/example-bi-directional-provider-restassured"
 PACT_CLI_DOCKER_VERSION?=latest
 PACT_CLI_DOCKER_RUN_COMMAND?=docker run --rm -v /${PWD}:/${PWD} -w ${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli:${PACT_CLI_DOCKER_VERSION}
