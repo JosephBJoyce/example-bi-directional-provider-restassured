@@ -1,116 +1,95 @@
 openapi: 3.0.1
 info:
-  title: Product API
-  description: PactFlow Product API demo
+  title: Simple API
+  description: A simple API with GET, PUT, and DELETE endpoints
   version: 1.0.0
+servers:
+  - url: http://localhost:3000
 paths:
-  /products:
-    post:
-      summary: Create a product
-      description: Creates a new product
-      operationId: createProduct
+  /items:
+    get:
+      summary: Retrieve all items
+      responses:
+        '200':
+          description: A list of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+  /items/{id}:
+    put:
+      summary: Update an item by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the item to update
+          schema:
+            type: integer
       requestBody:
-        description: Create a new Product
+        description: Item data to update
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Product'
-            examples:
-              application/json:
-                value:
-                  id: "1234"
-                  type: "food"
-                  price: 42
+              $ref: '#/components/schemas/Item'
       responses:
-        "200":
-          description: successful operation
+        '200':
+          description: The updated item
           content:
-            "application/json; charset=utf-8":
+            application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-              examples:
-                application/json:
-                  value:
-                    id: "1234"
-                    type: "food"
-                    price: 42
-    get:
-      summary: List all products
-      description: Returns all products
-      operationId: getAllProducts
-      responses:
-        "200":
-          description: successful operation
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found
           content:
-            "application/json; charset=utf-8":
+            application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: '#/components/schemas/Product'
-              examples:
-                application/json:
-                  value:
-                    - id: "1234"
-                      type: "food"
-                      price: 42
-                      # name: "pizza"
-                      # version: "1.0.0"
-                      # see https://github.com/apiaryio/dredd/issues/1430 for why
-        "400":
-          description: Invalid ID supplied
-          content: {}
-  /product/{id}:
-    get:
-      summary: Find product by ID
-      description: Returns a single product
-      operationId: getProductByID
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete an item by ID
       parameters:
-      - name: id
-        in: path
-        description: ID of product to get
-        schema:
-          type: string
-        required: true
-        example: 10
+        - name: id
+          in: path
+          required: true
+          description: ID of the item to delete
+          schema:
+            type: integer
       responses:
-        "200":
-          description: successful operation
+        '200':
+          description: Item deleted
           content:
-            "application/json; charset=utf-8":
+            application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-              examples:
-                application/json:
-                  value:
-                    id: "1234"
-                    type: "food"
-                    price: 42
-                    # name: "pizza"
-                    # version: "1.0.0"
-                    # see https://github.com/apiaryio/dredd/issues/1430 for why
-        "400":
-          description: Invalid ID supplied
-          content: {}
-        "404":
-          description: Product not found
-          content: {}
+                $ref: '#/components/schemas/Message'
+        '404':
+          description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Product:
+    Item:
       type: object
-      required:
-        - id
-        - name
-        - price
       properties:
         id:
-          type: string
-        type:
-          type: string
+          type: integer
+          example: 1
         name:
           type: string
-        version:
+          example: Item 1
+    Error:
+      type: object
+      properties:
+        error:
           type: string
-        price:
-          type: number
+          example: Item not found
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Item deleted
